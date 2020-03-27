@@ -1,0 +1,75 @@
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="https://kiegroup.org/dmn/org/acme/playlist" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" id="_6AD36C87-AA43-4C0B-A593-560F57E2A5BC" name="decision" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="https://kiegroup.org/dmn/org/acme/playlist">
+  <dmn:extensionElements/>
+  <dmn:inputData id="_AEB5DF98-B076-406C-B455-C2B224ED884B" name="User">
+    <dmn:extensionElements/>
+    <dmn:variable id="_F8E3ADD8-8564-4CE2-9251-A2E34C601D72" name="User" typeRef="string"/>
+  </dmn:inputData>
+  <dmn:decision id="_22364510-10F7-4C1C-BCB4-7BCFFEBE1EF2" name="Playlist">
+    <dmn:extensionElements/>
+    <dmn:variable id="_EFD7EE8F-975B-45BD-9941-3AC6FC5E838F" name="Playlist" typeRef="string"/>
+    <dmn:informationRequirement id="_24DF4E6F-8A5A-4F4A-A7B8-1E64A7FEB1A2">
+      <dmn:requiredInput href="#_AEB5DF98-B076-406C-B455-C2B224ED884B"/>
+    </dmn:informationRequirement>
+    <dmn:decisionTable id="_D6E30AFF-1811-44C1-952E-563333410D4E" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <dmn:input id="_263C0CBE-0441-47F1-8029-4B4940895F2E">
+        <dmn:inputExpression id="_7D7340D5-89B2-4F6B-BE7C-405B737BD22B" typeRef="string">
+          <dmn:text>User</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="_56A8A736-E713-4C6F-9B78-87DEF45DFD98" typeRef="string"/>
+      <dmn:rule id="_73263A64-DF47-4FF7-8B9C-2E82A542DCB1">
+        <dmn:inputEntry id="_FFA3709F-74AE-4480-88BD-CD99D6589603">
+          <dmn:text>"evacchi"</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_5F7EFB1C-D6F6-4D3F-8618-59203ADCEA36">
+          <dmn:text>"turner"</dmn:text>
+        </dmn:outputEntry>
+      </dmn:rule>
+      <dmn:rule id="_0D0523FA-3514-4010-B8F2-7917EEA0F996">
+        <dmn:inputEntry id="_509156CF-A125-4F08-98C0-077B610545B0">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_453FB414-6FAC-4662-B3E9-E0725CD8185A">
+          <dmn:text>"landscapes"
+</dmn:text>
+        </dmn:outputEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <di:extension>
+        <kie:ComponentsWidthsExtension>
+          <kie:ComponentWidths dmnElementRef="_D6E30AFF-1811-44C1-952E-563333410D4E">
+            <kie:width>50</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>100</kie:width>
+          </kie:ComponentWidths>
+        </kie:ComponentsWidthsExtension>
+      </di:extension>
+      <dmndi:DMNShape xmlns:p0="https://kiegroup.org/dmn/_BB382880-F1CA-4F61-B71D-EBEB750B82DA" id="dmnshape-_AEB5DF98-B076-406C-B455-C2B224ED884B" dmnElementRef="p0:_AEB5DF98-B076-406C-B455-C2B224ED884B" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="397" y="436" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape xmlns:p1="https://kiegroup.org/dmn/_BB382880-F1CA-4F61-B71D-EBEB750B82DA" id="dmnshape-_22364510-10F7-4C1C-BCB4-7BCFFEBE1EF2" dmnElementRef="p1:_22364510-10F7-4C1C-BCB4-7BCFFEBE1EF2" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="577" y="436" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge xmlns:p2="https://kiegroup.org/dmn/_BB382880-F1CA-4F61-B71D-EBEB750B82DA" id="dmnedge-_24DF4E6F-8A5A-4F4A-A7B8-1E64A7FEB1A2" dmnElementRef="p2:_24DF4E6F-8A5A-4F4A-A7B8-1E64A7FEB1A2">
+        <di:waypoint x="497" y="461"/>
+        <di:waypoint x="577" y="461"/>
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</dmn:definitions>
