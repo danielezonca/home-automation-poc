@@ -1,14 +1,12 @@
-package org.acme.services;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+package org.kie.kogito.homeautomation.services;
 
 import org.jboss.logging.Logger;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.impl.Sig;
 
-@ApplicationScoped
+import javax.inject.Inject;
+import javax.inject.Named;
+
 public abstract class AbstractWelcomeHomeService {
 
     protected final Logger LOGGER = Logger.getLogger(this.getClass().getName());
@@ -18,7 +16,8 @@ public abstract class AbstractWelcomeHomeService {
     Process<?> p;
 
     protected void signalToProcess(String processId, String signalName, Object signalPayload) {
-        var pi = p.instances().findById(processId).get();
+        var pi = p.instances().findById(processId)
+                .orElseThrow(() -> new IllegalStateException("Impossible to find process with ID " + processId));
         pi.send(Sig.of(signalName, signalPayload));
     }
 }

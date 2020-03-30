@@ -1,9 +1,10 @@
-package org.acme.services;
+package org.kie.kogito.homeautomation.services;
+
+import org.kie.kogito.homeautomation.ImageData;
+import org.kie.kogito.homeautomation.util.RestService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-
-import org.acme.ImageData;
 
 @ApplicationScoped
 public class RecognitionService extends AbstractWelcomeHomeService {

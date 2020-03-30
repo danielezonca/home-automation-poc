@@ -1,4 +1,6 @@
-package org.acme.services;
+package org.kie.kogito.homeautomation.services;
+
+import org.kie.kogito.homeautomation.util.RestService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -6,7 +8,8 @@ import javax.inject.Inject;
 @ApplicationScoped
 public class Player extends AbstractWelcomeHomeService {
 
-    @Inject RestService service;
+    @Inject
+    RestService service;
 
     protected static String host = "api.quotable.io";
     protected static int port = 443;

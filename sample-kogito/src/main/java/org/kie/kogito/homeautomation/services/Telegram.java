@@ -1,12 +1,12 @@
-package org.acme.services;
+package org.kie.kogito.homeautomation.services;
+
+import org.kie.kogito.homeautomation.util.RestService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.acme.ImageData;
-
 @ApplicationScoped
-public class Camera extends AbstractWelcomeHomeService {
+public class Telegram extends AbstractWelcomeHomeService {
 
     @Inject
     RestService service;
@@ -16,14 +16,13 @@ public class Camera extends AbstractWelcomeHomeService {
     protected static boolean ssl = true;
     protected static String endpoint = "/random";
 
-    public void takePicture(String id) {
-        LOGGER.info("Camera.takePicture");
+    public void send(String id, String user, String playlist) {
+        LOGGER.info("Telegram.send");
         service.GET(host, port, ssl, endpoint, rawQuote -> {
             io.vertx.core.json.JsonObject json = rawQuote.bodyAsJsonObject();
             var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
-            var imageData = new ImageData(quote);
-            LOGGER.info("Received Picture " + quote);
-            signalToProcess(id, "receive-picture", imageData);
+            LOGGER.info("Sending telegram: " + quote);
+            signalToProcess(id, "message-sent", quote);
         });
     }
 }

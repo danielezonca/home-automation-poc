@@ -1,4 +1,4 @@
-package org.acme.services;
+package org.kie.kogito.homeautomation.util;
 
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.mutiny.core.Vertx;
@@ -12,6 +12,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.function.Consumer;
 
+/**
+ * Utility class to execute REST calls in a not-blocking way
+ */
 @ApplicationScoped
 public class RestService {
     @Inject
@@ -25,14 +28,14 @@ public class RestService {
         var client = initWebClient(host, port, ssl);
 
         threadContext.withContextCapture(client.get(endpoint).send().subscribeAsCompletionStage())
-                .thenAcceptAsync(callback::accept, managedExecutor);
+                .thenAcceptAsync(callback, managedExecutor);
     }
 
     public void POST(String host, int port, boolean ssl, String endpoint, Buffer body, Consumer<HttpResponse<Buffer>> callback) {
         var client = initWebClient(host, port, ssl);
 
         threadContext.withContextCapture(client.post(endpoint).sendBuffer(body).subscribeAsCompletionStage())
-                .thenAcceptAsync(callback::accept, managedExecutor);
+                .thenAcceptAsync(callback, managedExecutor);
     }
 
     protected WebClient initWebClient(String host, int port, boolean ssl) {
