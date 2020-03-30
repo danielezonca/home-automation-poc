@@ -2,30 +2,28 @@ package org.acme.services;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.acme.ImageData;
-import org.jboss.logging.Logger;
-import org.kie.kogito.process.Process;
-import org.kie.kogito.process.impl.Sig;
 
 @ApplicationScoped
-public class RecognitionService {
-    private static final Logger LOGGER = Logger.getLogger("RecognitionService");
-
-    @Inject
-    @Named("WelcomeHome")
-    Process<?> p;
+public class RecognitionService extends AbstractWelcomeHomeService {
 
     @Inject
     RestService service;
 
+    protected static String host = "api.quotable.io";
+    protected static int port = 443;
+    protected static boolean ssl = true;
+    protected static String endpoint = "/random";
+
     public void recognize(String id, ImageData imageData) {
-        service.consume(quote -> {
-            var pi = p.instances().findById(id).get();
+        LOGGER.info("RecognitionService.recognize");
+        service.GET(host, port, ssl, endpoint, rawQuote -> {
+            io.vertx.core.json.JsonObject json = rawQuote.bodyAsJsonObject();
+            var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
             var user = "evacchi";
-            LOGGER.info("Recognized user: " + user);
-            pi.send(Sig.of("receive-user", user));
+            LOGGER.info("Recognized user: " + user + " quote: " + quote);
+            signalToProcess(id, "receive-user", user);
         });
     }
 }

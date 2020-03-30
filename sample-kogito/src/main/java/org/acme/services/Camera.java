@@ -2,36 +2,28 @@ package org.acme.services;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import io.vertx.ext.web.client.WebClientOptions;
-import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.ext.web.client.WebClient;
 import org.acme.ImageData;
-import org.eclipse.microprofile.context.ManagedExecutor;
-import org.eclipse.microprofile.context.ThreadContext;
-import org.jboss.logging.Logger;
-import org.kie.kogito.process.Process;
-import org.kie.kogito.process.impl.Sig;
 
 @ApplicationScoped
-public class Camera {
-
-    private static final Logger LOGGER = Logger.getLogger("Camera");
-
-    @Inject
-    @Named("WelcomeHome")
-    Process<?> p;
+public class Camera extends AbstractWelcomeHomeService {
 
     @Inject
     RestService service;
 
+    protected static String host = "api.quotable.io";
+    protected static int port = 443;
+    protected static boolean ssl = true;
+    protected static String endpoint = "/random";
+
     public void takePicture(String id) {
-        service.consume(quote -> {
-            var pi = p.instances().findById(id).get();
+        LOGGER.info("Camera.takePicture");
+        service.GET(host, port, ssl, endpoint, rawQuote -> {
+            io.vertx.core.json.JsonObject json = rawQuote.bodyAsJsonObject();
+            var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
             var imageData = new ImageData(quote);
             LOGGER.info("Received Picture " + quote);
-            pi.send(Sig.of("receive-picture", imageData));
+            signalToProcess(id, "receive-picture", imageData);
         });
     }
 }

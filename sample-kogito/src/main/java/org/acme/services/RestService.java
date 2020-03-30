@@ -1,41 +1,47 @@
 package org.acme.services;
 
-import java.util.function.Consumer;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.core.buffer.Buffer;
+import io.vertx.mutiny.ext.web.client.HttpResponse;
 import io.vertx.mutiny.ext.web.client.WebClient;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.context.ThreadContext;
-import org.kie.kogito.process.Process;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.function.Consumer;
 
 @ApplicationScoped
 public class RestService {
-    @Inject ThreadContext threadContext;
-    @Inject ManagedExecutor managedExecutor;
-    @Inject Vertx vertx;
-
     @Inject
-    @Named("WelcomeHome")
-    Process<?> p;
+    ThreadContext threadContext;
+    @Inject
+    ManagedExecutor managedExecutor;
+    @Inject
+    Vertx vertx;
 
-    public void consume(Consumer<String> consumer) {
-        var client = WebClient.create(
+    public void GET(String host, int port, boolean ssl, String endpoint, Consumer<HttpResponse<Buffer>> callback) {
+        var client = initWebClient(host, port, ssl);
+
+        threadContext.withContextCapture(client.get(endpoint).send().subscribeAsCompletionStage())
+                .thenAcceptAsync(callback::accept, managedExecutor);
+    }
+
+    public void POST(String host, int port, boolean ssl, String endpoint, Buffer body, Consumer<HttpResponse<Buffer>> callback) {
+        var client = initWebClient(host, port, ssl);
+
+        threadContext.withContextCapture(client.post(endpoint).sendBuffer(body).subscribeAsCompletionStage())
+                .thenAcceptAsync(callback::accept, managedExecutor);
+    }
+
+    protected WebClient initWebClient(String host, int port, boolean ssl) {
+        return WebClient.create(
                 vertx,
                 new WebClientOptions()
-                        .setDefaultHost("api.quotable.io")
-                        .setDefaultPort(443)
-                        .setSsl(true));
+                        .setDefaultHost(host)
+                        .setDefaultPort(port)
+                        .setSsl(ssl));
 
-        threadContext.withContextCapture(client.get("/random").send().subscribeAsCompletionStage())
-                .thenAcceptAsync(response -> {
-                    io.vertx.core.json.JsonObject json = response.bodyAsJsonObject();
-                    var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
-                    consumer.accept(quote);
-                }, managedExecutor);
     }
 }

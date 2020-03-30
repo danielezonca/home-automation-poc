@@ -2,27 +2,24 @@ package org.acme.services;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.jboss.logging.Logger;
-import org.kie.kogito.process.Process;
-import org.kie.kogito.process.impl.Sig;
 
 @ApplicationScoped
-public class Player {
-    private static final Logger LOGGER = Logger.getLogger("Player");
+public class Player extends AbstractWelcomeHomeService {
 
     @Inject RestService service;
 
-    @Inject
-    @Named("WelcomeHome")
-    Process<?> p;
+    protected static String host = "api.quotable.io";
+    protected static int port = 443;
+    protected static boolean ssl = true;
+    protected static String endpoint = "/random";
 
     public void play(String id, String playlist) {
-        service.consume(quote -> {
-            var pi = p.instances().findById(id).get();
+        LOGGER.info("Player.play");
+        service.GET(host, port, ssl, endpoint, rawQuote -> {
+            io.vertx.core.json.JsonObject json = rawQuote.bodyAsJsonObject();
+            var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
             LOGGER.info(String.format("Playlist '%s' -- Song: '%s'", playlist, quote));
-            pi.send(Sig.of("painting-displayed", quote));
+            signalToProcess(id, "painting-displayed", quote);
         });
     }
 }

@@ -2,28 +2,25 @@ package org.acme.services;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.jboss.logging.Logger;
-import org.kie.kogito.process.Process;
-import org.kie.kogito.process.impl.Sig;
 
 @ApplicationScoped
-public class Telegram {
-    private static final Logger LOGGER = Logger.getLogger("Telegram");
-
-    @Inject
-    @Named("WelcomeHome")
-    Process<?> p;
+public class Telegram extends AbstractWelcomeHomeService {
 
     @Inject
     RestService service;
 
+    protected static String host = "api.quotable.io";
+    protected static int port = 443;
+    protected static boolean ssl = true;
+    protected static String endpoint = "/random";
+
     public void send(String id, String user, String playlist) {
-        service.consume(quote -> {
-            var pi = p.instances().findById(id).get();
+        LOGGER.info("Telegram.send");
+        service.GET(host, port, ssl, endpoint, rawQuote -> {
+            io.vertx.core.json.JsonObject json = rawQuote.bodyAsJsonObject();
+            var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
             LOGGER.info("Sending telegram: "+quote);
-            pi.send(Sig.of("message-sent", quote));
+            signalToProcess(id, "message-sent", quote);
         });
     }
 }
