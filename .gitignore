@@ -1,2 +1,5 @@
 target/
 .*
+
+kamel
+camel-k/telegram.properties
