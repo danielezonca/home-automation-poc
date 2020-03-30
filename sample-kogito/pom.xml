@@ -16,6 +16,27 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+
+        <camera.host>api.quotable.io</camera.host>
+        <camera.port>443</camera.port>
+        <camera.ssl>true</camera.ssl>
+        <camera.endpoint>random</camera.endpoint>
+
+        <player.host>api.quotable.io</player.host>
+        <player.port>443</player.port>
+        <player.ssl>true</player.ssl>
+        <player.endpoint>random</player.endpoint>
+
+        <recognition.service.host>api.quotable.io</recognition.service.host>
+        <recognition.service.port>443</recognition.service.port>
+        <recognition.service.ssl>true</recognition.service.ssl>
+        <recognition.service.endpoint>random</recognition.service.endpoint>
+
+        <telegram.host>api.quotable.io</telegram.host>
+        <telegram.port>443</telegram.port>
+        <telegram.ssl>true</telegram.ssl>
+        <telegram.endpoint>random</telegram.endpoint>
+
     </properties>
 
     <dependencyManagement>

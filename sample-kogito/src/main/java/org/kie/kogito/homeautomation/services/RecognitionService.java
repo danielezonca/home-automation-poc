@@ -1,5 +1,6 @@
 package org.kie.kogito.homeautomation.services;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.homeautomation.ImageData;
 import org.kie.kogito.homeautomation.util.RestService;
 
@@ -12,10 +13,17 @@ public class RecognitionService extends AbstractWelcomeHomeService {
     @Inject
     RestService service;
 
-    protected static String host = "api.quotable.io";
-    protected static int port = 443;
-    protected static boolean ssl = true;
-    protected static String endpoint = "/random";
+    @ConfigProperty(name = "recognition.service.host", defaultValue = "localhost")
+    protected String host;
+
+    @ConfigProperty(name = "recognition.service.port", defaultValue = "8080")
+    protected int port;
+
+    @ConfigProperty(name = "recognition.service.ssl", defaultValue = "false")
+    protected boolean ssl;
+
+    @ConfigProperty(name = "recognition.service.endpoint")
+    protected String endpoint;
 
     public void recognize(String id, ImageData imageData) {
         LOGGER.info("RecognitionService.recognize");

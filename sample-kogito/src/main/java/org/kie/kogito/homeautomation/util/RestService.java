@@ -7,6 +7,7 @@ import io.vertx.mutiny.ext.web.client.HttpResponse;
 import io.vertx.mutiny.ext.web.client.WebClient;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.context.ThreadContext;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -17,24 +18,29 @@ import java.util.function.Consumer;
  */
 @ApplicationScoped
 public class RestService {
+
+    protected final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+
     @Inject
-    ThreadContext threadContext;
+    protected ThreadContext threadContext;
     @Inject
-    ManagedExecutor managedExecutor;
+    protected ManagedExecutor managedExecutor;
     @Inject
-    Vertx vertx;
+    protected Vertx vertx;
 
     public void GET(String host, int port, boolean ssl, String endpoint, Consumer<HttpResponse<Buffer>> callback) {
+        LOGGER.info("GET http" + (ssl ? "s" : "" ) + "://" + host + ":" + port + sanitizeEndpoint(endpoint));
         var client = initWebClient(host, port, ssl);
 
-        threadContext.withContextCapture(client.get(endpoint).send().subscribeAsCompletionStage())
+        threadContext.withContextCapture(client.get(sanitizeEndpoint(endpoint)).send().subscribeAsCompletionStage())
                 .thenAcceptAsync(callback, managedExecutor);
     }
 
     public void POST(String host, int port, boolean ssl, String endpoint, Buffer body, Consumer<HttpResponse<Buffer>> callback) {
+        LOGGER.info("POST http" + (ssl ? "s" : "" ) + "://" + host + ": " + port + sanitizeEndpoint(endpoint));
         var client = initWebClient(host, port, ssl);
 
-        threadContext.withContextCapture(client.post(endpoint).sendBuffer(body).subscribeAsCompletionStage())
+        threadContext.withContextCapture(client.post(sanitizeEndpoint(endpoint)).sendBuffer(body).subscribeAsCompletionStage())
                 .thenAcceptAsync(callback, managedExecutor);
     }
 
@@ -46,5 +52,12 @@ public class RestService {
                         .setDefaultPort(port)
                         .setSsl(ssl));
 
+    }
+
+    protected String sanitizeEndpoint(String rawEndpoint) {
+        if (rawEndpoint == null) {
+            return null;
+        }
+        return rawEndpoint.startsWith("/") ? rawEndpoint : "/" + rawEndpoint;
     }
 }

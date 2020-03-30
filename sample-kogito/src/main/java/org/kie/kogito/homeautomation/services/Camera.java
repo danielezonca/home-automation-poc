@@ -1,5 +1,6 @@
 package org.kie.kogito.homeautomation.services;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.homeautomation.ImageData;
 import org.kie.kogito.homeautomation.util.RestService;
 
@@ -12,10 +13,17 @@ public class Camera extends AbstractWelcomeHomeService {
     @Inject
     RestService service;
 
-    protected static String host = "api.quotable.io";
-    protected static int port = 443;
-    protected static boolean ssl = true;
-    protected static String endpoint = "/random";
+    @ConfigProperty(name = "camera.host", defaultValue = "localhost")
+    protected String host;
+
+    @ConfigProperty(name = "camera.port", defaultValue = "8080")
+    protected int port;
+
+    @ConfigProperty(name = "camera.ssl", defaultValue = "false")
+    protected boolean ssl;
+
+    @ConfigProperty(name = "camera.endpoint")
+    protected String endpoint;
 
     public void takePicture(String id) {
         LOGGER.info("Camera.takePicture");

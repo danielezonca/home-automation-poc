@@ -1,5 +1,6 @@
 package org.kie.kogito.homeautomation.services;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.homeautomation.util.RestService;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -11,10 +12,17 @@ public class Telegram extends AbstractWelcomeHomeService {
     @Inject
     RestService service;
 
-    protected static String host = "api.quotable.io";
-    protected static int port = 443;
-    protected static boolean ssl = true;
-    protected static String endpoint = "/random";
+    @ConfigProperty(name = "telegram.host", defaultValue = "localhost")
+    protected String host;
+
+    @ConfigProperty(name = "telegram.port", defaultValue = "8080")
+    protected int port;
+
+    @ConfigProperty(name = "telegram.ssl", defaultValue = "false")
+    protected boolean ssl;
+
+    @ConfigProperty(name = "telegram.endpoint")
+    protected String endpoint;
 
     public void send(String id, String user, String playlist) {
         LOGGER.info("Telegram.send");
