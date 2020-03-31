@@ -6,6 +6,8 @@ import org.kie.kogito.homeautomation.util.RestService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import static org.kie.kogito.homeautomation.util.RestRequest.of;
+
 @ApplicationScoped
 public class Telegram extends AbstractWelcomeHomeService {
 
@@ -26,8 +28,9 @@ public class Telegram extends AbstractWelcomeHomeService {
 
     public void send(String id, String user, String playlist) {
         LOGGER.info("Telegram.send");
-        service.GET(host, port, ssl, endpoint, rawQuote -> {
-            io.vertx.core.json.JsonObject json = rawQuote.bodyAsJsonObject();
+        var request = of(host, port, ssl, endpoint);
+        service.GET(request, rawQuote -> {
+            var json = rawQuote.bodyAsJsonObject();
             var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
             LOGGER.info("Sending telegram: " + quote);
             signalToProcess(id, "message-sent", quote);

@@ -6,6 +6,12 @@ import org.kie.kogito.homeautomation.util.RestService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Base64;
+
+import static org.kie.kogito.homeautomation.util.RestRequest.of;
 
 @ApplicationScoped
 public class Camera extends AbstractWelcomeHomeService {
@@ -27,12 +33,19 @@ public class Camera extends AbstractWelcomeHomeService {
 
     public void takePicture(String id) {
         LOGGER.info("Camera.takePicture");
-        service.GET(host, port, ssl, endpoint, rawQuote -> {
-            io.vertx.core.json.JsonObject json = rawQuote.bodyAsJsonObject();
+        var request = of(host, port, ssl, endpoint);
+        service.GET(request, rawQuote -> {
+            var json = rawQuote.bodyAsJsonObject();
             var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
-            var imageData = new ImageData(quote);
-            LOGGER.info("Received Picture " + quote);
-            signalToProcess(id, "receive-picture", imageData);
+            try {
+                var imageBytes = Files.readAllBytes(Paths.get("classes/test.jpg"));
+                var imageData = new ImageData(quote, Base64.getEncoder().encodeToString(imageBytes));
+                LOGGER.info("Received Picture " + quote);
+                signalToProcess(id, "receive-picture", imageData);
+            } catch (IOException e) {
+                LOGGER.error(e, e);
+            }
+            LOGGER.info("Result " + quote);
         });
     }
 }

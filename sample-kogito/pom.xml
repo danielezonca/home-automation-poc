@@ -27,10 +27,10 @@
         <player.ssl>true</player.ssl>
         <player.endpoint>random</player.endpoint>
 
-        <recognition.service.host>api.quotable.io</recognition.service.host>
-        <recognition.service.port>443</recognition.service.port>
-        <recognition.service.ssl>true</recognition.service.ssl>
-        <recognition.service.endpoint>random</recognition.service.endpoint>
+        <recognition.service.host>localhost</recognition.service.host>
+        <recognition.service.port>8181</recognition.service.port>
+        <recognition.service.ssl>false</recognition.service.ssl>
+        <recognition.service.endpoint>/</recognition.service.endpoint>
 
         <telegram.host>api.quotable.io</telegram.host>
         <telegram.port>443</telegram.port>

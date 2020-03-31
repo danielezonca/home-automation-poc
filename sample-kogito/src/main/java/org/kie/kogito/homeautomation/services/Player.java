@@ -6,6 +6,8 @@ import org.kie.kogito.homeautomation.util.RestService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import static org.kie.kogito.homeautomation.util.RestRequest.of;
+
 @ApplicationScoped
 public class Player extends AbstractWelcomeHomeService {
 
@@ -26,8 +28,9 @@ public class Player extends AbstractWelcomeHomeService {
 
     public void play(String id, String playlist) {
         LOGGER.info("Player.play");
-        service.GET(host, port, ssl, endpoint, rawQuote -> {
-            io.vertx.core.json.JsonObject json = rawQuote.bodyAsJsonObject();
+        var request = of(host, port, ssl, endpoint);
+        service.GET(request, rawQuote -> {
+            var json = rawQuote.bodyAsJsonObject();
             var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
             LOGGER.info(String.format("Playlist '%s' -- Song: '%s'", playlist, quote));
             signalToProcess(id, "painting-displayed", quote);
