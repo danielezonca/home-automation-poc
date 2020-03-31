@@ -38,10 +38,13 @@ public class RestService {
         LOGGER.info("GET " + restRequest.toString());
         var client = initWebClient(restRequest);
 
-        threadContext.withContextCapture(
-                client.get(restRequest.getEndpoint())
-                        .send()
-                        .subscribeAsCompletionStage())
+        var get = client.get(restRequest.getEndpoint());
+        restRequest.getQueryParams()
+                .forEach(entry -> get.addQueryParam(entry.getKey(), entry.getValue()));
+
+        threadContext.withContextCapture(get
+                .send()
+                .subscribeAsCompletionStage())
                 .thenAcceptAsync(callback, managedExecutor);
     }
 
@@ -54,10 +57,13 @@ public class RestService {
 
         var client = initWebClient(restRequest);
 
-        threadContext.withContextCapture(
-                client.post(restRequest.getEndpoint())
-                        .sendMultipartForm(form)
-                        .subscribeAsCompletionStage())
+        var post = client.post(restRequest.getEndpoint());
+        restRequest.getQueryParams()
+                .forEach(entry -> post.addQueryParam(entry.getKey(), entry.getValue()));
+
+        threadContext.withContextCapture(post
+                .sendMultipartForm(form)
+                .subscribeAsCompletionStage())
                 .thenAcceptAsync(deleteTempFileAndApplyCallback(tmpFile, callback), managedExecutor);
     }
 

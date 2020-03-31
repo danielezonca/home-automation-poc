@@ -17,10 +17,11 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <camera.host>api.quotable.io</camera.host>
+        <camera.host>source.unsplash.com</camera.host>
         <camera.port>443</camera.port>
         <camera.ssl>true</camera.ssl>
-        <camera.endpoint>random</camera.endpoint>
+        <camera.endpoint>1600x900</camera.endpoint>
+        <camera.query>face=1</camera.query>
 
         <player.host>api.quotable.io</player.host>
         <player.port>443</player.port>

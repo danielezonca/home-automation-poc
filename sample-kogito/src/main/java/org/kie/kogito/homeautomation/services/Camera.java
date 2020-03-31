@@ -31,21 +31,27 @@ public class Camera extends AbstractWelcomeHomeService {
     @ConfigProperty(name = "camera.endpoint")
     protected String endpoint;
 
+    @ConfigProperty(name = "camera.query", defaultValue = "")
+    protected String query;
+
     public void takePicture(String id) {
         LOGGER.info("Camera.takePicture");
-        var request = of(host, port, ssl, endpoint);
-        service.GET(request, rawQuote -> {
-            var json = rawQuote.bodyAsJsonObject();
-            var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
+        var request = of(host, port, ssl, endpoint, query);
+        service.GET(request, httpResponse -> {
             try {
-                var imageBytes = Files.readAllBytes(Paths.get("classes/test.jpg"));
-                var imageData = new ImageData(quote, Base64.getEncoder().encodeToString(imageBytes));
-                LOGGER.info("Received Picture " + quote);
+                // Enable service
+//            var imageBytes = httpResponse.body().getBytes();
+                var imageBytes = Files.readAllBytes(Paths.get("../../testImages/bradPitt_3.jpg"));
+//                var imageBytes = Files.readAllBytes(Paths.get("../../testImages/angelinaJolie_3.jpg"));
+//                var imageBytes = Files.readAllBytes(Paths.get("../../testImages/nicolasCage_3.jpg"));
+//                var imageBytes = Files.readAllBytes(Paths.get("../../testImages/jackNicholson_1.jpg"));
+
+                var imageAsBase64 = Base64.getEncoder().encodeToString(imageBytes);
+                var imageData = new ImageData(imageAsBase64);
                 signalToProcess(id, "receive-picture", imageData);
-            } catch (IOException e) {
-                LOGGER.error(e, e);
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
             }
-            LOGGER.info("Result " + quote);
         });
     }
 }

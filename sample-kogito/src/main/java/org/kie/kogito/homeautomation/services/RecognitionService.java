@@ -1,5 +1,6 @@
 package org.kie.kogito.homeautomation.services;
 
+import io.vertx.core.json.JsonArray;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.homeautomation.ImageData;
 import org.kie.kogito.homeautomation.util.PostData;
@@ -16,6 +17,7 @@ public class RecognitionService extends AbstractWelcomeHomeService {
     private static final String mediaType = "image/jpeg";
     private static final String fileName = "tmp.jpg";
     private static final String name = "file";
+    private static final String unknown = "unknown";
 
     @Inject
     RestService service;
@@ -38,11 +40,18 @@ public class RecognitionService extends AbstractWelcomeHomeService {
         var postData = PostData.of(name, fileName, imageData.getImage(), mediaType);
         service.POST(request, postData, rawQuote -> {
             LOGGER.info("result " + rawQuote.bodyAsString());
-            var json = rawQuote.bodyAsJsonObject();
-            var quote = json.toString();
-            var user = "evacchi";
-            LOGGER.info("Recognized user: " + user + " quote: " + quote);
+            var matches = rawQuote.bodyAsJsonObject().getJsonArray("faces");
+            var user = extractMatchName(matches);
+            LOGGER.info("Recognized user: " + user);
             signalToProcess(id, "receive-user", user);
         });
+    }
+
+    protected String extractMatchName(JsonArray matches) {
+        if(matches.size() == 0) {
+            return unknown;
+        }
+        var matchedId = matches.getJsonObject(0).getString("id");
+        return matchedId.substring(0, matchedId.lastIndexOf("_"));
     }
 }
