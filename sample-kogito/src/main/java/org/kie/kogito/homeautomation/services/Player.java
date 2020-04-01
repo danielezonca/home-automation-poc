@@ -26,13 +26,14 @@ public class Player extends AbstractWelcomeHomeService {
     @ConfigProperty(name = "player.endpoint")
     protected String endpoint;
 
-    public void play(String id, String playlist) {
+    public void play(String id, String playlist, String canvas) {
         LOGGER.info("Player.play");
         var request = of(host, port, ssl, endpoint);
         service.GET(request, rawQuote -> {
             var json = rawQuote.bodyAsJsonObject();
             var quote = String.format("%s (%s)", json.getString("content"), json.getString("author"));
             LOGGER.info(String.format("Playlist '%s' -- Song: '%s'", playlist, quote));
+            LOGGER.info(String.format("Canvas '%s'", canvas));
             signalToProcess(id, "painting-displayed", quote);
         });
     }
