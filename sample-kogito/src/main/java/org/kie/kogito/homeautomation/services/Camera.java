@@ -40,11 +40,11 @@ public class Camera extends AbstractWelcomeHomeService {
         service.GET(request, httpResponse -> {
             try {
                 // Enable service
-//            var imageBytes = httpResponse.body().getBytes();
-                var imageBytes = Files.readAllBytes(Paths.get("../../testImages/bradPitt_3.jpg"));
-//                var imageBytes = Files.readAllBytes(Paths.get("../../testImages/angelinaJolie_3.jpg"));
-//                var imageBytes = Files.readAllBytes(Paths.get("../../testImages/nicolasCage_3.jpg"));
-//                var imageBytes = Files.readAllBytes(Paths.get("../../testImages/jackNicholson_1.jpg"));
+                var imageBytes = httpResponse.body().getBytes();
+                // var imageBytes = Files.readAllBytes(Paths.get("../../testImages/bradPitt_3.jpg"));
+                // var imageBytes = Files.readAllBytes(Paths.get("../../testImages/angelinaJolie_3.jpg"));
+                // var imageBytes = Files.readAllBytes(Paths.get("../../testImages/nicolasCage_3.jpg"));
+                // var imageBytes = Files.readAllBytes(Paths.get("../../testImages/jackNicholson_1.jpg"));
                 var imageAsBase64 = Base64.getEncoder().encodeToString(imageBytes);
                 var imageData = new ImageData(imageAsBase64);
                 signalToProcess(id, "receive-picture", imageData);

@@ -10,12 +10,15 @@
 
     <properties>
         <quarkus.version>1.3.0.Final</quarkus.version>
-        <kogito.version>8.0.0-SNAPSHOT</kogito.version>
+        <kogito.version>0.9.0</kogito.version>
         <surefire.version>2.22.1</surefire.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+
+        <quarkus.swagger-ui.always-include>true</quarkus.swagger-ui.always-include>
+        <quarkus.ssl.native>true</quarkus.ssl.native>
 
         <camera.host>source.unsplash.com</camera.host>
         <camera.port>443</camera.port>
@@ -102,6 +105,10 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-config-yaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
@@ -124,6 +131,9 @@
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
                 <version>1.3.0.Final</version>
+                <configuration>
+                    <uberJar>true</uberJar>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>

@@ -1,0 +1,25 @@
+camera:
+  host: source.unsplash.com
+  port: 443
+  ssl: true
+  endpoint: 1600x900
+  query: face=1
+
+player:
+  host: api.quotable.io
+  port: 443
+  ssl: true
+  endpoint: random
+
+recognition:
+  service:
+    host: localhost
+    port: 8181
+    ssl: false
+    endpoint: /
+
+telegram:
+  host: api.quotable.io
+  port: 443
+  ssl: true
+  endpoint: random
