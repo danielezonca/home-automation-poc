@@ -1,0 +1,39 @@
+# //
+# // kamel run camel-k/notifier-playlist.yaml --secret=telegram --dependency camel-jackson --dependency camel-telegram  --dependency camel-http
+# //
+
+- from:
+    uri: 'knative:endpoint/notifier-playlist'
+    steps:
+      - convert-body: 
+          type: "java.lang.String"
+      - unmarshal:
+          json: {}
+      - remove-headers: 
+          pattern: 'Camel*'
+      - remove-headers: 
+          pattern: 'Host*'
+      - set-header:
+          name: 'ImageQuery'
+          simple: '${body[query]}'
+      - set-body:
+          simple: '${body[message]}'
+      - to:  
+          uri: 'telegram:bots?chatId={{telegram.chat-id}}'
+      - remove-headers: 
+          pattern: 'Camel*'
+      - remove-headers: 
+          pattern: 'Host*'
+      - set-body:
+          simple: '${null}'
+      - tod:
+          uri: 'https://source.unsplash.com/1600x900/?${header[ImageQuery]}'      
+      - convert-body: 
+          type: "byte[]"        
+      - set-header:
+          name: 'CamelTelegramMediaType' 
+          constant: 'PHOTO_JPG' 
+      - to:  
+          uri: 'telegram:bots?chatId={{telegram.chat-id}}'      
+      - convert-body: 
+          type: "java.lang.String"  

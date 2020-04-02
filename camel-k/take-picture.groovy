@@ -1,5 +1,5 @@
 //
-// kamel run --dev camel-k/take-picture.groovy
+// kamel run camel-k/take-picture.groovy
 //
 
 import org.apache.camel.model.dataformat.JsonLibrary

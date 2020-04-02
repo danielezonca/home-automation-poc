@@ -1,0 +1,14 @@
+# //
+# // kamel run camel-k/notifier.yaml --secret=telegram --dependency camel-jackson --dependency camel-telegram
+# //
+
+- from:
+    uri: 'knative:endpoint/notifier'
+    steps:
+      - set-header:
+          name: 'CamelTelegramMediaType' 
+          constant: 'PHOTO_JPG' 
+      - to:  
+          uri: 'telegram:bots?chatId={{telegram.chat-id}}'      
+      - convert-body: 
+          type: "java.lang.String"  

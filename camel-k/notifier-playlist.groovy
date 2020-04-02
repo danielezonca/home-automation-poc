@@ -1,5 +1,5 @@
 //
-// kamel run --dev camel-k/notifier-playlist.groovy --secret=telegram
+// kamel run camel-k/notifier-playlist.groovy --secret=telegram
 //
 import org.apache.camel.component.telegram.TelegramMediaType
 import org.apache.camel.component.telegram.TelegramConstants

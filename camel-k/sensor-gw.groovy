@@ -1,5 +1,5 @@
 //
-// kamel run --dev camel-k/sensor-gw.groovy
+// kamel run camel-k/sensor-gw.groovy
 //
 rest {
     post {
