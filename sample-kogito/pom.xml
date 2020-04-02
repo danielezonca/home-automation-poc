@@ -20,26 +20,25 @@
         <quarkus.swagger-ui.always-include>true</quarkus.swagger-ui.always-include>
         <quarkus.ssl.native>true</quarkus.ssl.native>
 
-        <camera.host>source.unsplash.com</camera.host>
-        <camera.port>443</camera.port>
-        <camera.ssl>true</camera.ssl>
-        <camera.endpoint>1600x900</camera.endpoint>
-        <camera.query>face=1</camera.query>
+        <camera.host>take-picture</camera.host>
+        <camera.port>80</camera.port>
+        <camera.ssl>false</camera.ssl>
+        <camera.endpoint>/</camera.endpoint>
 
-        <player.host>api.quotable.io</player.host>
-        <player.port>443</player.port>
-        <player.ssl>true</player.ssl>
-        <player.endpoint>random</player.endpoint>
+        <player.host>notifier-playlist</player.host>
+        <player.port>80</player.port>
+        <player.ssl>false</player.ssl>
+        <player.endpoint>/</player.endpoint>
 
-        <recognition.service.host>localhost</recognition.service.host>
-        <recognition.service.port>8181</recognition.service.port>
+        <recognition.service.host>face-recognition-poc</recognition.service.host>
+        <recognition.service.port>80</recognition.service.port>
         <recognition.service.ssl>false</recognition.service.ssl>
         <recognition.service.endpoint>/</recognition.service.endpoint>
 
-        <telegram.host>api.quotable.io</telegram.host>
-        <telegram.port>443</telegram.port>
-        <telegram.ssl>true</telegram.ssl>
-        <telegram.endpoint>random</telegram.endpoint>
+        <telegram.host>notifier</telegram.host>
+        <telegram.port>80</telegram.port>
+        <telegram.ssl>false</telegram.ssl>
+        <telegram.endpoint>/</telegram.endpoint>
 
     </properties>
 

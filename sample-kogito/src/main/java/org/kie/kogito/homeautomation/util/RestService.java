@@ -48,12 +48,12 @@ public class RestService {
                 .thenAcceptAsync(callback, managedExecutor);
     }
 
-    public void POST(RestRequest restRequest, PostData postData, Consumer<HttpResponse<Buffer>> callback) {//        byte[] decode = Base64.getDecoder().decode(imageData.getImage());
-        LOGGER.info("POST " + restRequest.toString());
+    public void POSTForm(RestRequest restRequest, PostData postData, Consumer<HttpResponse<Buffer>> callback) {
+        LOGGER.info("POSTForm " + restRequest.toString());
 
-        Path tmpFile = createTempFile(postData.getContent());
+        Path tmpFile = createTempFile((String) postData.getContent());
         var form = MultipartForm.create()
-                .binaryFileUpload(postData.getName(), postData.getFilename(), tmpFile.toString(), postData.getMediaType());
+                .binaryFileUpload(postData.getName(), postData.getFilename(), tmpFile.toString(), postData.getContentType());
 
         var client = initWebClient(restRequest);
 
@@ -65,6 +65,25 @@ public class RestService {
                 .sendMultipartForm(form)
                 .subscribeAsCompletionStage())
                 .thenAcceptAsync(deleteTempFileAndApplyCallback(tmpFile, callback), managedExecutor);
+    }
+
+    public void POSTRawBody(RestRequest restRequest, PostData postData, Consumer<HttpResponse<Buffer>> callback) {
+        LOGGER.info("POSTRawBody " + restRequest.toString());
+
+        var client = initWebClient(restRequest);
+
+        var post = client.post(restRequest.getEndpoint());
+        restRequest.getQueryParams()
+                .forEach(entry -> post.addQueryParam(entry.getKey(), entry.getValue()));
+
+        var bufferContent = postData.getContent() instanceof String ? 
+            Buffer.buffer((String) postData.getContent()) :
+            Buffer.buffer((byte[]) postData.getContent());
+
+        threadContext.withContextCapture(post
+                .sendBuffer(bufferContent)
+                .subscribeAsCompletionStage())
+                .thenAcceptAsync(callback, managedExecutor);
     }
 
     protected WebClient initWebClient(RestRequest restRequest) {

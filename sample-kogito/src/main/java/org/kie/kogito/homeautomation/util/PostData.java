@@ -4,18 +4,22 @@ public class PostData {
 
     private final String name;
     private final String filename;
-    private final String content;
-    private final String mediaType;
+    private final Object content;
+    private final String contentType;
 
-    public static PostData of(String name, String filename, String content, String mediaType) {
-        return new PostData(name, filename, content, mediaType);
+    public static PostData of(String name, String filename, Object content, String contentType) {
+        return new PostData(name, filename, content, contentType);
     }
 
-    public PostData(String name, String filename, String content, String mediaType) {
+    public static PostData of(Object content, String contentType) {
+        return new PostData(null, null, content, contentType);
+    }
+
+    public PostData(String name, String filename, Object content, String contentType) {
         this.name = name;
         this.filename = filename;
         this.content = content;
-        this.mediaType = mediaType;
+        this.contentType = contentType;
     }
 
     public String getName() {
@@ -26,11 +30,11 @@ public class PostData {
         return filename;
     }
 
-    public String getContent() {
+    public Object getContent() {
         return content;
     }
 
-    public String getMediaType() {
-        return mediaType;
+    public String getContentType() {
+        return contentType;
     }
 }

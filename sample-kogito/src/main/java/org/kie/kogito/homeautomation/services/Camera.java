@@ -31,12 +31,9 @@ public class Camera extends AbstractWelcomeHomeService {
     @ConfigProperty(name = "camera.endpoint")
     protected String endpoint;
 
-    @ConfigProperty(name = "camera.query", defaultValue = "")
-    protected String query;
-
     public void takePicture(String id) {
         LOGGER.info("Camera.takePicture");
-        var request = of(host, port, ssl, endpoint, query);
+        var request = of(host, port, ssl, endpoint);
         service.GET(request, httpResponse -> {
             try {
                 // Enable service

@@ -14,13 +14,13 @@ import static org.kie.kogito.homeautomation.util.RestRequest.of;
 @ApplicationScoped
 public class RecognitionService extends AbstractWelcomeHomeService {
 
-    private static final String mediaType = "image/jpeg";
+    private static final String CONTENT_TYPE = "image/jpeg";
     private static final String fileName = "tmp.jpg";
     private static final String name = "file";
     private static final String unknown = "unknown";
 
     @Inject
-    RestService service;
+    protected RestService service;
 
     @ConfigProperty(name = "recognition.service.host", defaultValue = "localhost")
     protected String host;
@@ -37,8 +37,8 @@ public class RecognitionService extends AbstractWelcomeHomeService {
     public void recognize(String id, ImageData imageData) {
         LOGGER.info("RecognitionService.recognize");
         var request = of(host, port, ssl, endpoint);
-        var postData = PostData.of(name, fileName, imageData.getImage(), mediaType);
-        service.POST(request, postData, rawQuote -> {
+        var postData = PostData.of(name, fileName, imageData.getImage(), CONTENT_TYPE);
+        service.POSTForm(request, postData, rawQuote -> {
             LOGGER.info("result " + rawQuote.bodyAsString());
             var matches = rawQuote.bodyAsJsonObject().getJsonArray("faces");
             var user = extractMatchName(matches);
