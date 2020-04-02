@@ -1,0 +1,12 @@
+{
+    "canvas": "string",
+    "imageData": {
+        "image": "string"
+    },
+    "instanceId": "string",
+    "message": {
+        "value": "string"
+    },
+    "playlist": "string",
+    "user": "string"
+}

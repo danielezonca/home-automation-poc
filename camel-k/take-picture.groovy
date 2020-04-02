@@ -3,6 +3,7 @@
 //
 
 import org.apache.camel.model.dataformat.JsonLibrary
+
 rest {
     get {
         path '/'

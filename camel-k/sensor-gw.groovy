@@ -11,5 +11,8 @@ rest {
 }
 
 from('direct:sensor')
+  .removeHeader('Host')
+  .removeHeaders('Camel*')
+  .setBody().constant(null)
   .to('log:sensor?showAll=true&multiline=true')
-  .to('knative:endpoint/notifier-playlist')
+  .to('http://sample-kogito:8080/WelcomeHome')
