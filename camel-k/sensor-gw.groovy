@@ -12,5 +12,4 @@ rest {
 
 from('direct:sensor')
   .to('log:sensor?showAll=true&multiline=true')
-  .to('knative:endpoint/take-picture')
-  .to('knative:endpoint/notifier')
+  .to('knative:endpoint/notifier-playlist')

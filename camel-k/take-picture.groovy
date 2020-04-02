@@ -3,8 +3,15 @@
 //
 
 import org.apache.camel.model.dataformat.JsonLibrary
+rest {
+    get {
+        path '/'
+        produces 'application/json'
+        to 'direct:take-picture'
+    }
+}
 
-from('knative:endpoint/take-picture')
+from('direct:take-picture')
   .removeHeader('Host')
   .removeHeaders('Camel*')
   .setBody().constant(null)
