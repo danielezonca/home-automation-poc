@@ -1,6 +1,9 @@
-# //
-# // kamel run camel-k/notifier.yaml --secret=telegram --dependency camel-jackson --dependency camel-telegram
-# //
+# 
+# kamel kit create notifier-q --image quay.io/lburgazzoli/home-automation-poc-camel-k-notifier
+# kamel run camel-k/notifier.yaml --kit notifier-q --trait jvm.enabled=false --secret telegram
+#
+# kamel run camel-k/notifier.yaml --secret=telegram --dependency camel-jackson --dependency camel-telegram
+# 
 
 - from:
     uri: 'knative:endpoint/notifier'
