@@ -159,6 +159,7 @@
                                 </goals>
                                 <configuration>
                                     <additionalBuildArgs>--allow-incomplete-classpath</additionalBuildArgs>
+                                    <uberJar>false</uberJar>
                                 </configuration>
                             </execution>
                         </executions>
