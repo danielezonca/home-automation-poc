@@ -16,14 +16,6 @@
   
   native executable (and runnable jar) generated in `target/`
 
-# Test your application
-
-Generated application comes with sample test process that allows you to verify if the application is working as expected. Simply execute following command to try it out
-
-```sh
-curl -X POST "http://localhost:8080/WelcomeHome" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{}"
-```
-
 Once successfully invoked you should see feedback in the console of the running application.
 
 # Swagger documentation
