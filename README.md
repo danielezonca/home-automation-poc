@@ -61,9 +61,26 @@ Finally expose it
 
 ### Deploy Camel-K services
 
-Use [Camel-K installation guide](https://github.com/apache/camel-k#installation) to install `kamel` CLI.
+Use [Camel-K installation guide](https://github.com/apache/camel-k#installation) to install `kamel` CLI and to deploy the `camel-k-operator` to your cluster.
 
-After that you can just run it with each of resources to deploy them
+After that you should:
+- create a (telegram bot)[https://core.telegram.org/bots]
+- define a secret named telegram containing:
+
+```
+telegram.token   = ... # the tocken
+telegram.chat-id = ... # the chat id
+
+camel.component.telegram.authorization-token = {{telegram.token}}
+
+```
+
+- deploy the integrations:
+  - kamel kit create notifier-q --image quay.io/lburgazzoli/home-automation-poc-camel-k-notifier
+  - kamel run camel-k/notifier.yaml --kit notifier-q --trait jvm.enabled=false --secret telegram
+  - kamel run camel-k/notifier-playlist.yaml --kit notifier-q --trait jvm.enabled=false --secret telegram
+  - kamel run camel-k/sensor-gw.groovy
+  - kamel run camel-k/take-picture.groovy
 
 ### Deploy sample-kogito
 
