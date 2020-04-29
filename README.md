@@ -75,12 +75,14 @@ camel.component.telegram.authorization-token = {{telegram.token}}
 
 ```
 
-- deploy the integrations:
-  - kamel kit create notifier-q --image quay.io/lburgazzoli/home-automation-poc-camel-k-notifier
-  - kamel run camel-k/notifier.yaml --kit notifier-q --trait jvm.enabled=false --secret telegram
-  - kamel run camel-k/notifier-playlist.yaml --kit notifier-q --trait jvm.enabled=false --secret telegram
-  - kamel run camel-k/sensor-gw.groovy
-  - kamel run camel-k/take-picture.groovy
+- deploy the integrations
+```
+kamel kit create notifier-q --image quay.io/lburgazzoli/home-automation-poc-camel-k-notifier
+kamel run camel-k/notifier.yaml --kit notifier-q --trait jvm.enabled=false --secret telegram
+kamel run camel-k/notifier-playlist.yaml --kit notifier-q --trait jvm.enabled=false --secret telegram
+kamel run camel-k/sensor-gw.groovy
+kamel run camel-k/take-picture.groovy
+```
 
 ### Deploy sample-kogito
 
